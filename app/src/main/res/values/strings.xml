@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">m1 Test</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="exemple_texte">Yo les bros</string>
+    <string name="exemple_texte2">TextView</string>
+    <string name="exemple_texte3">TextView</string>
+    <string name="button">Boooooooouuuuuuuuutton !</string>
+</resources>

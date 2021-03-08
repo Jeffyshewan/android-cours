@@ -1,0 +1,37 @@
+package com.example.m1test.utils
+
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
+class FragmentDataBinding<T : Any>(val fragment: Fragment) : ReadWriteProperty<Fragment, T> {
+    private var _value: T? = null
+
+    init {
+        fragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onCreate(owner: LifecycleOwner) {
+                fragment.viewLifecycleOwnerLiveData.observe(owner, Observer {
+                    it.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                        override fun onDestroy(owner: LifecycleOwner) {
+                            _value = null
+                        }
+                    })
+                })
+            }
+        })
+    }
+
+    override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
+        return _value ?: throw IllegalStateException("Can't access value if null")
+    }
+
+    override fun setValue(thisRef: Fragment, property: KProperty<*>, value: T) {
+        _value = value
+    }
+}
+
+fun <T : Any> Fragment.fragmentAutoCleared() = FragmentDataBinding<T>(this)
